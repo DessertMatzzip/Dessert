@@ -1,8 +1,9 @@
 package com.example.jh.mydessert;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -17,23 +18,34 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
 
-        Button btn_join = (Button) findViewById(R.id.btn_join);
-        btn_join.setOnClickListener(new View.OnClickListener() {
+        Button btnSignUP = findViewById(R.id.btnSignUp);
+        btnSignUP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setDialog();
             }
         });
+
+        Button btnLogIn = findViewById(R.id.btnLogIn);
+        btnLogIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(getApplicationContext(), HomeActivity.class);
+                startActivity(myIntent);
+            }
+        });
     }
+
+
         private void setDialog()
         {
             AlertDialog.Builder builder=new AlertDialog.Builder(this);
             LayoutInflater inflater=getLayoutInflater();
             View view=inflater.inflate(R.layout.activity_join, null);
             builder.setView(view);
-            final Button submit=(Button) view.findViewById(R.id.btn_Submit);
-            final EditText email=(EditText) view.findViewById(R.id.edittextEmailAddress);
-            final EditText password=(EditText) view.findViewById(R.id.edittextPassword);
+            final Button submit = view.findViewById(R.id.btn_Submit);
+            final EditText email = view.findViewById(R.id.edittextEmailAddress);
+            final EditText password = view.findViewById(R.id.edittextPassword);
 
             final AlertDialog dialog=builder.create();
             submit.setOnClickListener(new View.OnClickListener() {
