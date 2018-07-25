@@ -1,49 +1,41 @@
 package com.example.jh.mydessert;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
+
+import com.example.jh.mydessert.CustomAdapters.*;
 
 import java.util.ArrayList;
 
 public class RankRegionalActivity extends AppCompatActivity {
 
-    ArrayList<MatzzipAdapter.Matzzip> ml = new ArrayList<MatzzipAdapter.Matzzip>();
+    ArrayList<MatzzipAdapter.Matzzip> arrayList_matzzip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rank_regional);
-
+        arrayList_matzzip = new ArrayList<MatzzipAdapter.Matzzip>();
         Button btnRankRegional = findViewById(R.id.btnRankRegional);
         Button btnRankMark = findViewById(R.id.btnRankMark);
 
-        MatzzipAdapter.Matzzip ml1 = new MatzzipAdapter.Matzzip();
-        ml1.img = R.drawable.back;
-        ml1.name = "맛집";
-        ml1.rank = "평점";
-        ml1.btn = "평가하기";
-
+        MatzzipAdapter.Matzzip matzzip = new MatzzipAdapter.Matzzip(R.drawable.back, "맛집", "평점", "평가하기");
+        arrayList_matzzip.add(matzzip);
 
         MatzzipAdapter adapter = new MatzzipAdapter(
                 getApplicationContext(),
                 R.layout.matzzip_listview,
-                ml);
+                arrayList_matzzip);
 
-        ListView MatzzipList = findViewById(R.id.MatzzipList);
-        MatzzipList.setAdapter(adapter);
+        ListView listView_matzzip = findViewById(R.id.MatzzipList);
+        listView_matzzip.setAdapter(adapter);
 
-        MatzzipList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView_matzzip.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("test", "아이템 클릭, position : " + position + ", id: " + id);
@@ -54,67 +46,3 @@ public class RankRegionalActivity extends AppCompatActivity {
     }
 }
 
-class MatzzipAdapter extends BaseAdapter {
-    Context context;
-    int layout;
-    ArrayList<Matzzip> ml;
-    LayoutInflater inf;
-
-    public MatzzipAdapter(Context context, int layout, ArrayList<Matzzip> ml) {
-        this.context = context;
-        this.layout = layout;
-        this.ml = ml;
-        this.inf = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
-
-    @Override
-    public int getCount() {
-        return ml.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return ml.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null)
-            convertView = inf.inflate(layout, null);
-
-        ImageView imageMatzzip = convertView.findViewById(R.id.imageMatzzip);
-        TextView textShopName = convertView.findViewById(R.id.textShopName);
-        TextView textAverageMark = convertView.findViewById(R.id.textAverageMark);
-        Button btnRankMark = convertView.findViewById(R.id.btnRankMark);
-
-        Matzzip mz = ml.get(position);
-        imageMatzzip.setImageResource(mz.img);
-        textShopName.setText(mz.name);
-        textAverageMark.setText(mz.rank);
-        btnRankMark.setText(mz.btn);
-
-        return convertView;
-    }
-
-    static class Matzzip {
-        int img;
-        String name;
-        String rank;
-        String btn;
-
-        public Matzzip(int img, String name, String rank) {
-            this.img = img;
-            this.name = name;
-            this.rank = rank;
-            this.btn = btn;
-        }
-
-        public Matzzip() {
-        }
-    }
-}
