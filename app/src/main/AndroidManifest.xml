@@ -19,6 +19,8 @@
         <activity android:name=".HomeActivity" />
         <activity android:name=".RankMapActivity" />
         <activity android:name=".RankRegionalActivity"></activity>
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".SearchActivity"></activity>
     </application>
 
 </manifest>
