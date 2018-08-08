@@ -1,37 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".NewsActivity">
+       <android.support.design.widget.TabLayout
+           android:id="@+id/tab"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"/>
+       
+       <android.support.v4.view.ViewPager
+           android:id="@+id/pager"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"/>
 
-    <LinearLayout
-        android:id="@+id/layoutNewsBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btnAnnouncement"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="공지" />
+       <fragment
+           android:id="@+id/fragmentAnnouncement"
+           android:name="com.example.jh.mydessert.Fragments.AnnoucementFragment"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           tools:layout="@layout/fragment_annoucement">
 
-        <Button
-            android:id="@+id/btnNotice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="알림" />
-    </LinearLayout>
+       </fragment>
 
-    <ListView
-        android:id="@+id/newsList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/layoutNewsBtn">
 
-    </ListView>
-</RelativeLayout>
+</LinearLayout>

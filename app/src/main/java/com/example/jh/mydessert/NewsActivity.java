@@ -1,44 +1,91 @@
 package com.example.jh.mydessert;
 
+
+import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 
-import com.example.jh.mydessert.CustomAdapters.NoticeAdapter;
+import com.example.jh.mydessert.Fragments.AnnoucementFragment;
 
 import java.util.ArrayList;
+import java.util.List;
+
 
 public class NewsActivity extends AppCompatActivity {
 
-    ArrayList<NoticeAdapter.Notice> arrayList_notice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
 
-        arrayList_notice = new ArrayList<NoticeAdapter.Notice>();
-        Button btnAnnouncement = findViewById(R.id.btnAnnouncement);
-        Button btnNotice = findViewById(R.id.btnNotice);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
 
-        NoticeAdapter adapter = new NoticeAdapter(
-                getApplicationContext(),
-                R.layout.notice_listview,
-                arrayList_notice);
+        List<Fragment> fragmentList=new ArrayList<>();
+        fragmentList.add(AnnoucementFragment.newInstance(createLowerCase()));
+        fragmentList.add(AnnoucementFragment.newInstance(createUpperCase()));
 
-        ListView listView_newsList = findViewById(R.id.newsList);
-        listView_newsList.setAdapter(adapter);
+        NewsAdapter adapter=new NewsAdapter(getSupportFragmentManager(),
+                fragmentList,
+                new String[] {"공지", "알림"});
+        viewPager.setAdapter(adapter);
 
-        listView_newsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("test", "아이템 클릭, position : " + position + ", id: " + id);
-            }
-        });
+
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private List<String> createLowerCase() {
+        List<String> list=new ArrayList<>();
+        char ch='a';
+        for (char i=ch; i<='z'; i++) {
+            list.add(String.valueOf(i));
+        }
+        return list;
+    }
+
+    private List<String> createUpperCase() {
+        List<String> list=new ArrayList<>();
+        char ch='A';
+        for (char i=ch; i<='Z'; i++) {
+            list.add(String.valueOf(i));
+        }
+        return list;
+    }
+
+    private static class NewsAdapter extends FragmentPagerAdapter {
+        private List<Fragment> mmFragmentList;
+        private String [] mmPageTitles;
+
+        public NewsAdapter(android.support.v4.app.FragmentManager fm,
+                           List<Fragment> fragmentList,
+                           String[] pageTitles) {
+            super(fm);
+            mmFragmentList=fragmentList;
+            mmPageTitles=pageTitles;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            return mmFragmentList.size();
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mmPageTitles[position];
+        }
     }
 }
+
 

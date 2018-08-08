@@ -28,11 +28,10 @@
             android:text="카카오톡 로그인"
             android:layout_gravity="center"/>
 
-        <Button
+        <com.facebook.login.widget.LoginButton
             android:id="@+id/btnFacebook"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="페이스북 로그인"
             android:layout_gravity="center" />
 
         <Button
@@ -43,11 +42,11 @@
             android:layout_gravity="center"/>
 
         <Button
-            android:id="@+id/btnLogIn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="로그인" />
+        android:id="@+id/btnLogIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="로그인" />
 
 
     </LinearLayout>

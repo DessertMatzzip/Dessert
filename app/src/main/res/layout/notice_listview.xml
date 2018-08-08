@@ -7,7 +7,7 @@
         android:id="@+id/textAnnouncement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="뉴스" />
+        android:text="ㅇㅇㅇ님이 코멘트를 추가했습니다" />
 
 
 </RelativeLayout>

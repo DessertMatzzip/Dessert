@@ -14,14 +14,14 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-//        EditText editTextSearch = findViewById(R.id.editTextSearch);
-//        Button btnSearch = findViewById(R.id.btnSearch);
-//        btnSearch.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent i = new Intent(getApplicationContext(), SearchActivity.class);
-//                startActivity(i);
-//            }
+////        EditText editTextSearch = findViewById(R.id.editTextSearch);
+////        Button btnSearch = findViewById(R.id.btnSearch);
+////        btnSearch.setOnClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View v) {
+////                Intent i = new Intent(getApplicationContext(), SearchActivity.class);
+////                startActivity(i);
+////            }
 //        });
     }
 }
