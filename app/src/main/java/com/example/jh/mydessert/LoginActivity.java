@@ -1,9 +1,13 @@
 package com.example.jh.mydessert;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -17,10 +21,39 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.kakao.auth.ApiResponseCallback;
+import com.kakao.auth.AuthService;
+import com.kakao.auth.ErrorCode;
+import com.kakao.auth.ISessionCallback;
+import com.kakao.auth.Session;
+import com.kakao.auth.network.response.AccessTokenInfoResponse;
+import com.kakao.network.ErrorResult;
+import com.kakao.usermgmt.UserManagement;
+import com.kakao.usermgmt.callback.LogoutResponseCallback;
+import com.kakao.usermgmt.callback.MeResponseCallback;
+import com.kakao.usermgmt.response.model.UserProfile;
+import com.kakao.util.exception.KakaoException;
+import com.kakao.util.helper.log.Logger;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.Signature;
 
 public class LoginActivity extends AppCompatActivity {
     CallbackManager callbackManager;
     LoginButton btnFacebook;
+    SessionCallback callback;
+    com.kakao.usermgmt.LoginButton btnKakaotalk;
+    public void redirectLoginActivity(){
+        Intent intent = new Intent(LoginActivity.this,LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
         btnFacebook = (LoginButton) findViewById(R.id.btnFacebook);
         btnFacebook.setReadPermissions("email");
+        btnKakaotalk = (com.kakao.usermgmt.LoginButton) findViewById(R.id.btnKakaotalk);
         btnFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -96,6 +130,18 @@ public class LoginActivity extends AppCompatActivity {
                         // App code
                     }
                 });
+
+        callback = new SessionCallback();
+        Session.getCurrentSession().addCallback(callback);
+        String token = Session.getCurrentSession().getAccessToken();
+        if (token.length()>0){
+            UserManagement.requestLogout(new LogoutResponseCallback() {
+                @Override
+                public void onCompleteLogout() {
+                    redirectLoginActivity();
+                }
+            });
+        }
     }
 
 
@@ -129,5 +175,59 @@ public class LoginActivity extends AppCompatActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    private class SessionCallback implements ISessionCallback {
+        @Override
+        public void onSessionOpened() {
+
+            KakaorequestMe();
+        }
+
+        @Override
+        public void onSessionOpenFailed(KakaoException exception) {
+            if (exception != null) {
+                Log.d("ErrorSession", exception.getMessage());
+            }
+        }
+    }
+
+    public void KakaorequestMe() {
+
+
+        UserManagement.requestMe(new MeResponseCallback() {
+
+            @Override
+            public void onFailure(ErrorResult errorResult) {
+                Log.d("Error", "오류로 카카오로그인 실패 ");
+            }
+
+            @Override
+            public void onSessionClosed(ErrorResult errorResult) {
+                Log.d("Error", "오류로 카카오로그인 실패 ");
+            }
+
+            @Override
+            public void onNotSignedUp() {
+            }
+
+            @Override
+            public void onSuccess(UserProfile userProfile) {
+                //로그인에 성공하면 로그인한 사용자의 일련번호, 닉네임, 이미지url등을 리턴합니다.
+                //사용자 ID는 보안상의 문제로 제공하지 않고 일련번호는 제공합니다.
+
+
+                //이곳에서 로그인이 완료될시 실행시킬 동작을 추가시켜주시면 됩니다 ~
+
+                Log.e("UserProfile", userProfile.toString());
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                String token = Session.getCurrentSession().getAccessToken();
+                Log.e("TOKEN", Session.getCurrentSession().getAccessToken());
+                startActivity(intent);
+                finish();
+
+            }
+        });
+    }
+
 }
 
