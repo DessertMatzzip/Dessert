@@ -35,6 +35,8 @@ import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 import com.kakao.usermgmt.callback.MeResponseCallback;
+import com.kakao.usermgmt.callback.MeV2ResponseCallback;
+import com.kakao.usermgmt.response.MeV2Response;
 import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
@@ -42,30 +44,37 @@ import com.kakao.util.helper.log.Logger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
     CallbackManager callbackManager;
     LoginButton btnFacebook;
-    SessionCallback callback;
+    private SessionCallback callback;
     com.kakao.usermgmt.LoginButton btnKakaotalk;
-    public void redirectLoginActivity(){
+    Map<String,String> kakao_properties;
+
+
+    public void redirectLoginActivity() {
         String token = Session.getCurrentSession().getAccessToken();
-        if(token.length() > 0){
-            PostConnection postConnection = new PostConnection(getResources().getString(R.string.dessert_server_addr)+"login/kakao");
-            postConnection.addParam("accessToken",token);
+        if (token.length() > 0) {
+            PostConnection postConnection = new PostConnection(getResources().getString(R.string.dessert_server_addr) + "login/kakao");
+            postConnection.addParam("accessToken", token);
             try {
                 postConnection.execute().get();
-                if(postConnection.resultObj.getString("result").contentEquals("signup_req")){
-                    Log.e("server logged in",postConnection.resultObj.toString());
-                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                if (postConnection.resultObj.getString("result").contentEquals("signup_req")) {
+                    Log.e("server logged in", postConnection.resultObj.toString());
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
                 }
-            }catch (Exception exc){
+            } catch (Exception exc) {
                 exc.printStackTrace();
             }
 
-        }else {
+        } else {
             Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
@@ -109,16 +118,28 @@ public class LoginActivity extends AppCompatActivity {
         btnFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                PostConnection postConnection = new PostConnection(getResources().getString(R.string.dessert_server_addr)+"login/facebook");
+                PostConnection postConnection = new PostConnection(getResources().getString(R.string.dessert_server_addr) + "login/facebook");
                 postConnection.addParam("accessToken", AccessToken.getCurrentAccessToken().toString());
                 try {
                     postConnection.execute().get();
-                    Log.e("result",postConnection.resultObj.getString("result"));
-                    if(postConnection.resultObj.getString("result").contentEquals("signup_req")){
+                    Log.e("result", postConnection.resultObj.getString("result"));
+                    if (postConnection.resultObj.getString("result").contentEquals("signup_req")) {
+                        KakaoToast.makeToast(LoginActivity.this, "회원가입이 필요합니다.", Toast.LENGTH_SHORT).show();
+
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         finish();
+                    } else if (postConnection.resultObj.getString("result").contentEquals("signin_req")) {
+                        KakaoToast.makeToast(LoginActivity.this, UserManagement.getInstance().toString() +"로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        AlertDialog dialog;
+                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                        builder.setMessage("앱 서버와 연결할 수 없습니다.");
+                        builder.setPositiveButton("확인", null);
+                        dialog = builder.create();
+                        dialog.show();
                     }
-                }catch (Exception exc){
+                } catch (Exception exc) {
                     exc.printStackTrace();
                 }
             }
@@ -145,26 +166,43 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-        LoginManager.getInstance().registerCallback(callbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        // App code
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        // App code
-                    }
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        // App code
-                    }
-                });
+//        LoginManager.getInstance().registerCallback(callbackManager,
+//                new FacebookCallback<LoginResult>() {
+//                    @Override
+//                    public void onSuccess(LoginResult loginResult) {
+//                        // App code
+//
+//                    }
+//
+//                    @Override
+//                    public void onCancel() {
+//                        // App code
+//                    }
+//
+//                    @Override
+//                    public void onError(FacebookException exception) {
+//                        // App code
+//                    }
+//                });
 
         callback = new SessionCallback();
         Session.getCurrentSession().addCallback(callback);
+        Session.getCurrentSession().checkAndImplicitOpen();
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    getPackageName(), PackageManager.GET_SIGNATURES);
+            for (android.content.pm.Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.e("MY KEY HASH:",
+                        Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        }
     }
 
 
@@ -202,54 +240,39 @@ public class LoginActivity extends AppCompatActivity {
     private class SessionCallback implements ISessionCallback {
         @Override
         public void onSessionOpened() {
+            UserManagement.getInstance().me(new MeV2ResponseCallback() {
+                @Override
+                public void onSessionClosed(ErrorResult errorResult) {
+                    KakaoToast.makeToast(LoginActivity.this, "로그인에 실패하였습니다.", Toast.LENGTH_SHORT).show();
 
-            KakaorequestMe();
+                }
 
+                @Override
+                public void onSuccess(MeV2Response result) {
+
+                    KakaoToast.makeToast(LoginActivity.this, result.getNickname()+"로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show();
+
+                    long number = result.getId();
+
+                    redirectLoginActivity();
+                }
+            });
         }
 
         @Override
         public void onSessionOpenFailed(KakaoException exception) {
             if (exception != null) {
-                Log.d("ErrorSession", exception.getMessage());
+                Logger.e(exception);
+                KakaoToast.makeToast(LoginActivity.this, "로그인에 실패하였습니다.", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    public void KakaorequestMe() {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Session.getCurrentSession().removeCallback(callback);
 
-
-        UserManagement.requestMe(new MeResponseCallback() {
-
-            @Override
-            public void onFailure(ErrorResult errorResult) {
-                Log.d("Error", "오류로 카카오로그인 실패 ");
-            }
-
-            @Override
-            public void onSessionClosed(ErrorResult errorResult) {
-                Log.d("Error", "오류로 카카오로그인 실패 ");
-            }
-
-            @Override
-            public void onNotSignedUp() {
-            }
-
-            @Override
-            public void onSuccess(UserProfile userProfile) {
-                //로그인에 성공하면 로그인한 사용자의 일련번호, 닉네임, 이미지url등을 리턴합니다.
-                //사용자 ID는 보안상의 문제로 제공하지 않고 일련번호는 제공합니다.
-
-
-                //이곳에서 로그인이 완료될시 실행시킬 동작을 추가시켜주시면 됩니다 ~
-
-                Log.e("UserProfile", userProfile.toString());
-                Log.e("TOKEN", Session.getCurrentSession().getAccessToken());
-
-                redirectLoginActivity();
-
-            }
-        });
     }
-
 }
 
