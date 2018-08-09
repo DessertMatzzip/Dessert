@@ -3,6 +3,7 @@ package com.example.jh.mydessert;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -10,10 +11,13 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.jh.mydessert.Connections.PostConnection;
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -45,9 +49,27 @@ public class LoginActivity extends AppCompatActivity {
     SessionCallback callback;
     com.kakao.usermgmt.LoginButton btnKakaotalk;
     public void redirectLoginActivity(){
-        Intent intent = new Intent(LoginActivity.this,LoginActivity.class);
-        startActivity(intent);
-        finish();
+        String token = Session.getCurrentSession().getAccessToken();
+        if(token.length() > 0){
+            PostConnection postConnection = new PostConnection(getResources().getString(R.string.dessert_server_addr)+"login/kakao");
+            postConnection.addParam("accessToken",token);
+            try {
+                postConnection.execute().get();
+                if(postConnection.resultObj.getString("result").contentEquals("signup_req")){
+                    Log.e("server logged in",postConnection.resultObj.toString());
+                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }catch (Exception exc){
+                exc.printStackTrace();
+            }
+
+        }else {
+            Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override
@@ -87,8 +109,18 @@ public class LoginActivity extends AppCompatActivity {
         btnFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish();
+                PostConnection postConnection = new PostConnection(getResources().getString(R.string.dessert_server_addr)+"login/facebook");
+                postConnection.addParam("accessToken", AccessToken.getCurrentAccessToken().toString());
+                try {
+                    postConnection.execute().get();
+                    Log.e("result",postConnection.resultObj.getString("result"));
+                    if(postConnection.resultObj.getString("result").contentEquals("signup_req")){
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
+                    }
+                }catch (Exception exc){
+                    exc.printStackTrace();
+                }
             }
 
             @Override
@@ -133,15 +165,6 @@ public class LoginActivity extends AppCompatActivity {
 
         callback = new SessionCallback();
         Session.getCurrentSession().addCallback(callback);
-        String token = Session.getCurrentSession().getAccessToken();
-        if (token.length()>0){
-            UserManagement.requestLogout(new LogoutResponseCallback() {
-                @Override
-                public void onCompleteLogout() {
-                    redirectLoginActivity();
-                }
-            });
-        }
     }
 
 
@@ -181,6 +204,7 @@ public class LoginActivity extends AppCompatActivity {
         public void onSessionOpened() {
 
             KakaorequestMe();
+
         }
 
         @Override
@@ -219,11 +243,9 @@ public class LoginActivity extends AppCompatActivity {
                 //이곳에서 로그인이 완료될시 실행시킬 동작을 추가시켜주시면 됩니다 ~
 
                 Log.e("UserProfile", userProfile.toString());
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                String token = Session.getCurrentSession().getAccessToken();
                 Log.e("TOKEN", Session.getCurrentSession().getAccessToken());
-                startActivity(intent);
-                finish();
+
+                redirectLoginActivity();
 
             }
         });
