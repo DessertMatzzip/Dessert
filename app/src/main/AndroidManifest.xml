@@ -43,7 +43,8 @@
         <activity android:name=".RankRegionalActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".SearchActivity" />
-        <activity android:name=".ViewPagerActivity"></activity>
+        <activity android:name=".ViewPagerActivity" />
+        <activity android:name=".SettingNoticeActivity"></activity>
     </application>
 
 </manifest>
