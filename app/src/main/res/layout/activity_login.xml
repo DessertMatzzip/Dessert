@@ -21,12 +21,13 @@
         android:layout_below="@+id/logo"
         android:layout_marginTop="150dp"
         >
-        <Button
+        <com.kakao.usermgmt.LoginButton
             android:id="@+id/btnKakaotalk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="카카오톡 로그인"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"/>
+
 
         <com.facebook.login.widget.LoginButton
             android:id="@+id/btnFacebook"
