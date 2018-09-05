@@ -1,14 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyPageActivity">
+    tools:context=".OthersPageActivity">
+
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/arrowback" />
+
+    <Button
+        android:id="@+id/btnFollow"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/plus" />
 
     <LinearLayout
         android:id="@+id/layoutMyProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/btnFollow"
         android:orientation="horizontal">
 
 
@@ -21,44 +37,62 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:columnCount="3"
-            android:rowCount="3"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:rowCount="3">
 
 
             <TextView
                 android:id="@+id/textNumOfComment"
+                android:layout_column="0"
+                android:layout_gravity="center"
+                android:layout_row="0"
+                android:layout_weight="1"
                 android:gravity="center"
-                android:layout_columnWeight="1"
                 android:text="13" />
 
             <TextView
                 android:id="@+id/textNumOfCollection"
-                android:layout_columnWeight="1"
+                android:layout_column="1"
+                android:layout_gravity="center"
+                android:layout_row="0"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="2" />
 
             <TextView
                 android:id="@+id/textNumOfToGO"
-                android:layout_columnWeight="1"
+                android:layout_column="2"
+                android:layout_gravity="center"
+                android:layout_row="0"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="21" />
 
             <TextView
                 android:id="@+id/textComment"
-                android:layout_columnWeight="1"
+                android:layout_column="0"
+                android:layout_gravity="center"
+                android:layout_row="1"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="코멘트" />
 
             <TextView
                 android:id="@+id/textCollection"
-                android:layout_columnWeight="1"
+                android:layout_column="1"
+                android:layout_gravity="center"
+                android:layout_row="1"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="컬렉션" />
 
 
             <TextView
                 android:id="@+id/textTogo"
-                android:layout_columnWeight="1"
+                android:layout_column="2"
+                android:layout_gravity="center"
+                android:layout_row="1"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="가고 싶어요" />
 
@@ -88,9 +122,10 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerMatzzipPid"
-        android:layout_below="@+id/textSelfIntroduction"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textSelfIntroduction">
 
     </android.support.v7.widget.RecyclerView>
+
 </RelativeLayout>

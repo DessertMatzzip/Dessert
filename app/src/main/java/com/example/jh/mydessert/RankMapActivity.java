@@ -13,13 +13,8 @@ public class RankMapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rankmap);
 
-        Button btnMap = findViewById(R.id.btnMap);
-        btnMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent MyIntent = new Intent(getApplicationContext(), RankRegionalActivity.class);
-                startActivity(MyIntent);
-            }
-        });
+
+
+
     }
 }

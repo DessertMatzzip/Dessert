@@ -21,91 +21,33 @@ import java.util.List;
 
 public class AnnoucementFragment extends Fragment {  // Fragement는 그냥 Layout 덩어리
 
-    private List <String> mData;
+   private OnFragmentInteractionListener mListener;
 
-    public static AnnoucementFragment newInstance(List<String> data) {
-        AnnoucementFragment fragment=new AnnoucementFragment();
-
-        Bundle bundle=new Bundle();
-        bundle.putSerializable("data", (Serializable) data);
-
-        fragment.setArguments(bundle);
-        return  fragment;
-    }
-
-
-    // Activity의 onCreate와 같은부분 : 레이아웃 완성
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_annoucement, container, false);
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState); // Fragment 생명주기에는 없음. 위와 아래 있는 것 사이
-
-        ListView listViewAnnouncemnet = (ListView) view.findViewById(R.id.listViewAnnouncement);
-
-        Bundle bundle=getArguments();
-        mData=(List<String>)bundle.getSerializable("data");
-
-        NewsAdapter adapter=new NewsAdapter(mData);
-
-        listViewAnnouncemnet.setAdapter(adapter);
-    }
-
-    private static class NewsAdapter extends BaseAdapter {
-
-        private final List<String> mmData;
-
-        public NewsAdapter(List<String> data) {
-            mmData = data;
-        }
-
-        @Override
-        public int getCount() {
-            return mmData.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return mmData.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, android.view.View convertView, ViewGroup parent) {
-            ViewHolder viewHolder;
-            if (convertView == null) {
-                viewHolder = new ViewHolder();
-
-                convertView = LayoutInflater.from(parent.getContext())
-                        .inflate(android.R.layout.simple_list_item_1, parent, false);
-
-                viewHolder.textView = (TextView) convertView.findViewById(android.R.id.text1);
-
-                convertView.setTag(viewHolder);
-            } else {
-                viewHolder=(ViewHolder) convertView.getTag();
-            }
-
-            String data=mmData.get(position);
-
-            viewHolder.textView.setText(data);
-
-            return convertView;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener=(OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    +"must implement OnFragmentInteractionListener");
         }
     }
 
-    private static class ViewHolder {
-        TextView textView;
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener=null;
     }
 
+    public interface OnFragmentInteractionListener {
 
+        void onFragmentInteraction(Uri uri);
+    }
 }

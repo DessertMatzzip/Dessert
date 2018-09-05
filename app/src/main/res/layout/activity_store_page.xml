@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StorePageActivity">
+
+
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/arrowback"/>
+
+    <Button
+        android:id="@+id/btnAlteration"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/exclamationmark"/>
+
+    <ImageView
+        android:id="@+id/imageStore"
+        android:layout_below="@+id/btnBack"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/icelab"/>
+
+    <TextView
+        android:id="@+id/textStoreName"
+        android:layout_below="@+id/imageStore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="가게 이름 : Ice Lab"
+        android:textSize="20dp"
+        android:gravity="center"/>
+
+    <GridLayout
+        android:layout_below="@+id/textStoreName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:columnCount="3"
+        android:rowCount="3">
+
+        <TextView
+            android:id="@+id/textNumOfComment"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="13"/>
+
+        <TextView
+            android:id="@+id/textNumOfToGo"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="21"/>
+
+        <TextView
+            android:id="@+id/textNumOfAverageMark"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="4.1"/>
+
+        <TextView
+            android:id="@+id/textComment"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="코멘트"/>
+
+        <TextView
+            android:id="@+id/textToGo"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="오고싶어요"/>
+
+        <TextView
+            android:id="@+id/textAverageMark"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="평균 평점"/>
+
+        <Button
+            android:id="@+id/btnLookFid"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="피드보기"/>
+
+        <Button
+            android:id="@+id/btnMenu"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="메뉴"/>
+
+        <Button
+            android:id="@+id/btnStoreInfo"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="가게정보"/>
+
+
+
+    </GridLayout>
+</RelativeLayout>

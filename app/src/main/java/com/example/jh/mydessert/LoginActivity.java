@@ -51,7 +51,7 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
     CallbackManager callbackManager;
-    LoginButton btnFacebook;
+       LoginButton btnFacebook;
     private SessionCallback callback;
     com.kakao.usermgmt.LoginButton btnKakaotalk;
     Map<String,String> kakao_properties;
@@ -107,6 +107,16 @@ public class LoginActivity extends AppCompatActivity {
 //                Intent myIntent = new Intent(getApplicationContext(), SearchActivity.class);
                 Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(myIntent);
+            }
+        });
+
+        Button btnStorePage = findViewById(R.id.btnStorePage);
+        btnStorePage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent myIntent = new Intent(getApplicationContext(), SearchActivity.class);
+                Intent myIntent2 = new Intent(LoginActivity.this, StorePageActivity.class);
+                startActivity(myIntent2);
             }
         });
 

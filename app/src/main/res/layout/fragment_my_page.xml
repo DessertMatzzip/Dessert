@@ -1,14 +1,123 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.jh.mydessert.Fragments.MyPageFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="이곳은 마이 페이지 입니다." />
 
-</FrameLayout>
+    <Button
+        android:id="@+id/btnSearch"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+
+        android:layout_alignParentTop="true"
+        android:layout_gravity="right"
+        android:background="@drawable/setting" />
+
+    <LinearLayout
+        android:id="@+id/layoutMyProfile"
+        android:layout_below="@+id/btnSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <ImageView
+            android:id="@+id/imageMyProfile"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/brad"/>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:columnCount="3"
+            android:orientation="horizontal"
+            android:rowCount="3">
+
+
+            <TextView
+                android:id="@+id/textNumOfComment"
+                android:layout_columnWeight="1"
+                android:gravity="center"
+                android:text="13" />
+
+            <TextView
+                android:id="@+id/textNumOfCollection"
+                android:layout_columnWeight="1"
+                android:gravity="center"
+                android:text="2" />
+
+            <TextView
+                android:id="@+id/textNumOfToGO"
+                android:layout_columnWeight="1"
+                android:gravity="center"
+                android:text="21" />
+
+            <TextView
+                android:id="@+id/textComment"
+                android:layout_columnWeight="1"
+                android:gravity="center"
+                android:text="코멘트" />
+
+            <TextView
+                android:id="@+id/textCollection"
+                android:layout_column="1"
+                android:layout_gravity="center"
+                android:layout_row="1"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="컬렉션" />
+
+
+            <TextView
+                android:id="@+id/textTogo"
+                android:layout_columnWeight="1"
+                android:gravity="center"
+                android:text="가고 싶어요" />
+
+            <TextView
+                android:id="@+id/textFollower"
+                android:layout_columnSpan="2"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="팔로워 30" />
+
+            <TextView
+                android:id="@+id/textFollowing"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="팔로잉 76" />
+        </GridLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/layoutMyProfile"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/textSelfIntroduction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textFollowing"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:hint="자기소개 메세지" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerMatzzipPid"
+        android:layout_below="@+id/textSelfIntroduction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+</RelativeLayout>

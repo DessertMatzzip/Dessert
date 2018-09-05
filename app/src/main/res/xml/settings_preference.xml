@@ -1,28 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-<PreferenceCategory android:title="알림"
-    android:textSize="20dp">
-    <SwitchPreference
-        android:key="follow"
-        android:title="팔로우"/>
-
-    <SwitchPreference
-        android:key="likes"
-        android:title="좋아요"/>
-
-    <SwitchPreference
-        android:key=""
-        android:title="댓글"/>
-
-    <SwitchPreference
-        android:key="newpostnotice"
-        android:title="새글 알림"/>
+    <PreferenceCategory
+        android:textSize="20dp"
 
 
-    <SwitchPreference
-        android:key="unknown"
-        android:title="unknown"/>
-</PreferenceCategory>
+        android:title="알림">
+        <SwitchPreference
+            android:key="follow"
+            android:title="팔로우" />
+
+        <PreferenceScreen
+            android:key="keywordScreen"
+            android:summary="사용 안함"
+            android:title="키워드 알림">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="keyword"
+            android:summary="등록된 키워드가 포함된 메시지는 알림이 꺼져 있어도 푸시알림을 받게됨"
+            android:title="키워드 알림" />
+
+        </PreferenceScreen>
+
+        <SwitchPreference
+            android:key="likes"
+            android:title="좋아요" />
+
+        <SwitchPreference
+            android:key="comment"
+            android:title="댓글" />
+
+        <SwitchPreference
+            android:key="newpostnotice"
+            android:title="새글 알림" />
+
+
+        <SwitchPreference
+            android:key="unknown"
+            android:title="unknown" />
+    </PreferenceCategory>
 
 </PreferenceScreen>
