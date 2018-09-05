@@ -29,6 +29,7 @@ public class MyPageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my_page, container, false);
+        btnSearch=(Button) view.findViewById(R.id.btnSearch);
         context=view.getContext();
         return view;
     }

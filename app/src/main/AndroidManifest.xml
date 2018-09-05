@@ -55,7 +55,8 @@
         <activity android:name=".SettingActivity" />
         <activity android:name=".MyProfileActivitiy" />
         <activity android:name=".OthersPageActivity" />
-        <activity android:name=".StorePageActivity"></activity>
+        <activity android:name=".StorePageActivity" />
+        <activity android:name=".SignUpActivity"></activity>
     </application>
 
 </manifest>

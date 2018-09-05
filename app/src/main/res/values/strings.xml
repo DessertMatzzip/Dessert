@@ -6,5 +6,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="facebook_app_id">1817846761629565</string>
     <string name="fb_login_protocol_scheme">fb1817846761629565</string>
-    <string name="dessert_server_addr">http://172.30.1.40/</string>
+    <string name="dessert_server_addr">http://112.170.171.74:8000/</string>
 </resources>
